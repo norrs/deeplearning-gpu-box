@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+for id in $(docker ps -q); do
+ docker inspect $id | jq -c \
+ '.[] | .Name[1:] + " -> " + (.Config.Env | map(select(. | tostring | contains("NVIDIA_VISIBLE_DEVICES")))|tostring)';
+done
+# sed 's/^.*=//'

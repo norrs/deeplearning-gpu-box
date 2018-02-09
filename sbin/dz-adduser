@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+adduser $1
+adduser $1 docker

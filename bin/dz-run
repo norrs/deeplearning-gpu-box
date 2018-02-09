@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+set -e
+USER="$(id -u -n)"
+#UID="$(id -u)" # Provided as read only variabel in bash shells ;-)
+GID="$(id -g)"
+
+function error_print_nvidia_devices() {
+ echo "Unclean exit code listed; listing nvidia devices for you:"
+ nvidia-smi
+}
+
+function all_traps() {
+  error_print_nvidia_devices;
+}
+
+#trap 'all_traps' EXIT
+trap 'error_print_nvidia_devices' EXIT
+
+GPU="${1:?Please select a GPU index you want to bring into your environment}"
+PORT="${2:-8888}"
+IMAGE="${3:-$USER/gpu-dev}"
+CMD="${4:-/usr/local/bin/jupyter notebook --no-browser --ip=0.0.0.0}"
+# --ip to bypass python and no uid/user in namedspaced passwd :-p
+test ! -d /home/$USER/.local/share/jupyter && mkdir -p -m 700 /home/$USER/.local/share/jupyter
+test ! -d /home/$USER/.misc && mkdir -p -m 700 /home/$USER/.misc
+
+if [[ "$(docker images -q "$IMAGE" 2>/dev/null)" == "" ]]; then
+  echo "Missing $USER's image ${IMAGE} - Trying to build.."
+  echo ""
+  dz-build "${IMAGE}"
+fi
+
+# HOME env for bypassing no user inside image... :D
+docker run \
+ --user $UID:$GID \
+ -w /home/$USER \
+ --rm \
+ --runtime=nvidia \
+ --name "$USER" \
+  -e NVIDIA_VISIBLE_DEVICES="$GPU" \
+  -e HOME="/home/$USER" \
+ -d \
+ -it \
+ -p "$PORT:8888" \
+ -v "/home/$USER:/home/$USER" \
+ -v "/data/home/$USER:/home/$USER/storage" \
+ "$IMAGE" \
+ $CMD
+ 
+echo "Created new container named $USER from $IMAGE with GPU index $GPU and gpu02.trd.zedge.net:$PORT mapped to 8888 inside container"
+# Hack to easy make a clickable link in terminal. Sleeping 3 to wait for jupyter to boot..
+docker exec \
+ --workdir /home/$USER \
+ --user $UID:$GID \
+ -e PORT=$PORT \
+ -e HOME="/home/$USER" \
+ $USER \
+ /bin/bash -c "/bin/sleep 3 && /usr/local/bin/jupyter notebook list | sed "s/0.0.0.0:8888/gpu02.trd.zedge.net:\$PORT/g""
+
+trap '-' EXIT

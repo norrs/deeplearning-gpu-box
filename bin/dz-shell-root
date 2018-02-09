@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -e
+USER="$(id -u -n)"
+echo "Remember changes are not persistent outside /home/$USER !"
+echo "Update your Dockerfile in /home/$USER/images/<image>/ if you want persistent changes."
+set -x
+docker exec -u root -ti $USER /bin/bash -i

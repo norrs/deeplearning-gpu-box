@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# TODO $USER doesn't resolve in update-motd.d due to not have dropped privileges yet :(
+echo ""
+echo 'dz-build [image_directory=$USER/gpu-dev] (looks for folders in ~/images/ !)'
+echo 'dz-run <gpu_id (0|1> [port=8888] [image=$USER/gpu-dev] [cmd=/usr/local/bin/jupyter notebook --no-browser --ip=0.0.0.0]'
+echo "dz-run 1 9999   # Is usually enough"
+echo "dz-shell-root # gains root shell in your container run from dz-run"
+echo ""
+echo "Current usage shown by dz-usage ↓↓↓:"
+dz-usage
+echo " If above ↑↑↑ empty, no users running containers using GPU"
+echo ""
+echo ""
+echo "Remember to stop/kill your container after usage! Make sure you save notebook first!"
+echo ' Kill container by executing «docker stop $USER»'
+echo ""
+echo "This help text from dz-help"

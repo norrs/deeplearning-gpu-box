@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+USER="$(id -u -n)"
+name="${1:-$USER/gpu-dev}"
+name_without_user="${name#$USER}"
+name_without_user="${name_without_user%$USER}"
+docker_context="/home/${USER}/images/${name_without_user}"
+docker build -t "$name" "$docker_context"
+echo "Built $name image from $docker_context"
