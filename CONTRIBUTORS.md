@@ -1,7 +1,7 @@
 norrs/deeplearning-gpu-box (sorted alphabetically)
 ==================================================
 
-* **[Andreas Joelsson(https://github.com/scrier)**
+* **[Andreas Joelsson](https://github.com/scrier)**
   
   * Colleague who pushed the idea and made [@norrs](https://github.com/norrs) setup a shared GPU dev environment.
   * Alpha tester
