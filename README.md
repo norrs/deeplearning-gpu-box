@@ -52,4 +52,5 @@ This help text from dz-help
 
 # Credits
 
-[igorbb](https://github.com/igorbb) for the initial concept of getting it to run inside Docker and sharing his gpu-dev image https://hub.docker.com/r/igorbb/gpu-dev/
+* [igorbb](https://github.com/igorbb) for the initial concept of getting it to run inside Docker and sharing his gpu-dev image https://hub.docker.com/r/igorbb/gpu-dev/
+* See https://github.com/norrs/deeplearning-gpu-box/blob/master/CONTRIBUTORS.md
