@@ -27,7 +27,7 @@ A more simple route is using [igorbb](https://github.com/igorbb)'s [gpu-dev](htt
 
 # Install
 
-TODO: Write docks :-))))))
+See [install.md](install.md)
 
 # Usage
 
