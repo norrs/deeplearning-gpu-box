@@ -9,8 +9,10 @@ apt install curl
 
 # Nvidia driver
 
+```bash
 sudo add-apt-repository ppa:graphics-drivers/ppa
 apt install nvidia-390-dev
+```
 
 (nvidia-xconfig / nvidia-settings)
 cool-bits=1 enables the possibility of overclocking
@@ -27,13 +29,20 @@ Nvidia SMI is like the GPU's varaint of ps.
 
 https://docs.docker.com/install/linux/docker-ce/ubuntu/
 
+```bash
 apt-get install \
     apt-transport-https \
     ca-certificates \
     curl \
     software-properties-common
-    
+
+# ubuntu:
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+#debian:
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+
+sudo apt-get install -y nvidia-docker2 sudo pkill -SIGHUP dockerd
+```
 
 $ sudo apt-key fingerprint 0EBFCD88
 
@@ -43,14 +52,23 @@ uid                  Docker Release (CE deb) <docker@docker.com>
 sub   4096R/F273FCD8 2017-02-22
 
 
+```bash
+# ubuntu
 $ sudo add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
    $(lsb_release -cs) \
+   stable"
+# debian sid/stretch
+$ sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   stretch
    stable"
    
 apt update
 
 apt install docker-ce
+```
+
 
 # Nvidia docker 
 
@@ -62,19 +80,43 @@ docker volume ls -q -f driver=nvidia-docker | xargs -r -I{} -n1 docker ps -q -a 
 sudo apt-get purge -y nvidia-docker
 
 ## Add the package repositories
+
+https://nvidia.github.io/nvidia-docker/
+
+### Ubuntu 
+```bash
 curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | \
   sudo apt-key add -
 curl -s -L https://nvidia.github.io/nvidia-docker/ubuntu16.04/amd64/nvidia-docker.list | \
   sudo tee /etc/apt/sources.list.d/nvidia-docker.list
 sudo apt-get update
+```
+
+### Debian
+
+```
+curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | \
+  sudo apt-key add -
+curl -s -L https://nvidia.github.io/nvidia-docker/debian9/amd64/nvidia-docker.list | \
+  sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+sudo apt-get update
+```
+
 
 ## Install nvidia-docker2 and reload the Docker daemon configuration
+
+Please note that *docker-engine* or *docker* should **NOT** be installed. Remove first if it is as new packages for docker is *docker-ce* or *docker-ee*.
+
+```bash
 sudo apt-get install -y nvidia-docker2
 sudo pkill -SIGHUP dockerd
+```
 
 ## Test nvidia-smi with the latest official CUDA image
-docker run --runtime=nvidia --rm nvidia/cuda nvidia-smi
 
+```bash
+docker run --runtime=nvidia --rm nvidia/cuda nvidia-smi
+```
 
 
 apt install nvidia-390-dev
