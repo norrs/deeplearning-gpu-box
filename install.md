@@ -75,9 +75,12 @@ apt install docker-ce
 https://github.com/NVIDIA/nvidia-docker install notes below copied from this webpage. If you are keen enough and don't want to bother with nvidia docker, read notes on https://hub.docker.com/r/gw000/debian-cuda/ which explains and shows what exactly nvidia-docker is doing by mounting nvidia drivers and hardware devices (/dev) into the container. 
 
 
-# # If you have nvidia-docker 1.0 installed: we need to remove it and all existing GPU containers
+## If you have nvidia-docker 1.0 installed: we need to remove it and all existing GPU containers
+
+```bash
 docker volume ls -q -f driver=nvidia-docker | xargs -r -I{} -n1 docker ps -q -a -f volume={} | xargs -r docker rm -f
 sudo apt-get purge -y nvidia-docker
+```
 
 ## Add the package repositories
 
